@@ -72,6 +72,30 @@ def download_blob_to_temp(bucket_name, source_blob_name, temp_folder="/tmp"):
 
     return local_path
 
+def filter_ad_names_by_campaign(ad_set, campaign_name, full_data):
+
+    #Fiter to the ad_set
+    filtered_data = full_data[full_data['Ad_Set_Name__Facebook_Ads'] == ad_set] 
+          
+    # Filter the full_data DataFrame for the given campaign name   
+    filtered_data = full_data[full_data['Campaign_Name__Facebook_Ads'] == campaign_name]
+
+    # Filter ad_names based on those present in the filtered_data
+    filtered_ad_names = filtered_data["Ad_Name__Facebook_Ads"].unique()
+
+    return filtered_ad_names
+
+def get_campaign_value(ad_set, creative_storage_data):
+    # Filter the creative_storage_data for the given ad_set
+    filtered_data = creative_storage_data[creative_storage_data['Ad_Set'] == ad_set]
+
+    # Check if there is an associated campaign value
+    if not filtered_data.empty and 'Campaign' in filtered_data.columns:
+        # Return the first campaign value found
+        return filtered_data.iloc[0]['Campaign']
+    else:
+        # Return None if no campaign value is found
+        return None
 
 def update_ad_set_table(test_name, ad_names):
     # Query to find the current Ad-Set and Campaign
@@ -108,21 +132,9 @@ def update_ad_set_table(test_name, ad_names):
     st.success(f"Upload was successful! Please refresh the page to see updates.")
 
 
-def upload_to_gcs(bucket_name, source_file, destination_blob_name):
-    # Initialize the GCS client
-    credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"]
-    )
-    client = storage.Client(credentials=credentials)
-    bucket = client.bucket(bucket_name)
-
-    # Create a new blob and upload the file's content.
-    blob = bucket.blob(destination_blob_name)
-    blob.upload_from_file(source_file, content_type='image/jpeg')  # Set content_type as per your file type
-
 
 ### Code for past tests function ###
-def process_ad_set_data(data, test, past_test_data):
+def process_ad_set_data(data, test, past_test_data, campaign):
     # Filter data for the specific ad set
 
     data = data.rename(columns={
@@ -137,12 +149,16 @@ def process_ad_set_data(data, test, past_test_data):
       'Ad_Preview_Shareable_Link__Facebook_Ads' : 'Ad_Link'
     })
 
+          
+
     ad_names = past_test_data['Ad_Names'].iloc[0]
     ad_names = ad_names.split(",")
 
     # Filter data on just ad_set
     ad_set_data = data[data['Ad_Name'].isin(ad_names)]
+    ad_set_data = data[data['Campaign'] == campaign]
 
+          
     # Your data processing steps
     selected_columns = ['Ad_Name', 'Impressions', 'Clicks', 'Cost', 'Leads']
     filtered_data = ad_set_data[selected_columns]
@@ -460,20 +476,18 @@ def main_dashboard():
             st.markdown("<h4 style='text-align: center;'>No Past Tests to Display</h4>", unsafe_allow_html=True)
   else:        
             past_tests = past_test_data['Test_Name']
-          
+            
             # Dictionary to store DataFrames for each ad set
             test_dfs = {}
             
             for test in past_tests:
-                test_dfs[test] = process_ad_set_data(st.session_state.full_data, test, past_test_data)
+                campaign = past_test_data[past_test_data['Test_Name'= test]].Campaign
+                test_dfs[test] = process_ad_set_data(st.session_state.full_data, test, past_test_data, campaign)
           
             for test in test_dfs:
                 with st.expander(f"Show Data for {test}"):
                     st.dataframe(test_dfs[test], width=2000)
                     current_df = test_dfs[test]
-                    ad_names = current_df['Ad_Name']
-                    ad_names = [item + ".jpg" for item in ad_names]
-                    ad_names.pop()
 
 if __name__ == '__main__':
     password_protection()
