@@ -319,27 +319,20 @@ def main_dashboard():
         if ad_name:  # If there's an ad name entered
             ad_exists = data['Ad_Name'].str.contains(ad_name, regex=False).any()
             new_ad_names.append(ad_name)  # Store ad name
-            if ad_exists:
-                uploaded_file = st.file_uploader(f"Upload image for {ad_name}", key=f"uploaded_image_{i}", type=['png', 'jpg', 'jpeg'])
-                uploaded_images[ad_name] = uploaded_file  # Associate uploaded file with ad name
-                if uploaded_file is None:
-                    all_filled = False  # Mark as not ready if any image is missing
+            #if ad_exists:
+            #    uploaded_file = st.file_uploader(f"Upload image for {ad_name}", key=f"uploaded_image_{i}", type=['png', 'jpg', 'jpeg'])
+            #    uploaded_images[ad_name] = uploaded_file  # Associate uploaded file with ad name
+            #    if uploaded_file is None:
+            #        all_filled = False  # Mark as not ready if any image is missing
         else:
             all_filled = False  # Mark as not ready if any ad name is missing
 
      # Enable the upload button only if all conditions are met
-    if all_filled and st.button("Upload Images"):
-        # Proceed with the upload logic
-        for ad_name, uploaded_file in uploaded_images.items():
-            if uploaded_file is not None:
-                # Example: Upload logic here
-                ad_name = ad_name.replace("/", "-").replace("$","").replace(". ", " ")
-                upload_to_gcs(bucket_name, uploaded_file, f"{ad_name}.jpg")
-                pass
+    if all_filled and st.button("Upload Images"): 
         # Update the database with the new test name and associated ad names
         combined_ad_names = ",".join(new_ad_names)
         update_ad_set_table(test_name, combined_ad_names)
-        st.success("Images uploaded and test updated successfully!")
+        st.success("Test updated successfully!")
 
 
   if current_test_data.empty:
@@ -459,8 +452,7 @@ def main_dashboard():
             final_adnames = final_df['Ad_Name']
             final_adnames = [item + ".jpg" for item in final_adnames]
             final_adnames.pop()
-
-            display_images(final_adnames, final_adnames)        
+     
           
   st.markdown("<h2 style='text-align: center;'>Past Tests</h2>", unsafe_allow_html=True)
 
@@ -482,7 +474,6 @@ def main_dashboard():
                     ad_names = current_df['Ad_Name']
                     ad_names = [item + ".jpg" for item in ad_names]
                     ad_names.pop()
-                    display_images(ad_names, ad_names)
 
 if __name__ == '__main__':
     password_protection()
