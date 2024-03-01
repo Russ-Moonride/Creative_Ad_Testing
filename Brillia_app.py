@@ -197,8 +197,7 @@ def process_ad_set_data(data, test, past_test_data, campaign):
   
     # Top row data for comparison
     top_ad_Purchases = final_df.iloc[0]['Purchases']
-    top_ad_impressions = final_df.iloc[0]['Impressions']
-    st.write(final_df)     
+    top_ad_impressions = final_df.iloc[0]['Impressions']   
     # Iterate through each row except the first and last
     for index, row in final_df.iloc[1:-1].iterrows():
         variant_Purchases = row['Purchases']
@@ -482,6 +481,8 @@ def main_dashboard():
             
             for test in past_tests:
                 campaign = past_test_data[past_test_data['Test_Name'] == test].Campaign.iloc[0]
+                st.write(test)
+                st.write(campaign)
                 test_dfs[test] = process_ad_set_data(st.session_state.full_data, test, past_test_data, campaign)
           
             for test in test_dfs:
