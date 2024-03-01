@@ -152,11 +152,12 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     past_test_data = past_test_data[past_test_data['Test_Name'] == test]
     ad_names = past_test_data.iloc[0]["Ad_Names"]
     ad_names = ad_names.split(",")
-    st.write(ad_names)
           
     # Filter data on just ad_set
     ad_set_data = data[data['Ad_Name'].isin(ad_names)]
     ad_set_data = data[data['Campaign'] == campaign]
+
+    st.write(ad_set_data)
           
     # Your data processing steps
     selected_columns = ['Ad_Name', 'Impressions', 'Clicks', 'Cost', 'Purchases']
