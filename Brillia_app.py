@@ -150,7 +150,7 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     })
 
     past_test_data = past_test_data[past_test_data['Test_Name'] == test]
-    ad_names = past_test_data['Ad_Names']
+    ad_names = past_test_data.at[0, "Ad_Names"]
     ad_names = ad_names.split(",")
 
     st.write(ad_names)
