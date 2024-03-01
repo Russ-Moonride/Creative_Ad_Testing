@@ -76,14 +76,14 @@ def download_blob_to_temp(bucket_name, source_blob_name, temp_folder="/tmp"):
 def update_ad_set_table(test_name, ad_names):
     # Query to find the current Ad-Set and Campaign
     query = """
-    SELECT Test_Name, Ad_Names FROM `freedom-solar-406415.freedom_solar_streamlit.creativetestingstorage` WHERE Type = 'Current'
+    SELECT Test_Name, Ad_Names FROM `brillia-415723.streamlit_data.CreativeTestingStorage` WHERE Type = 'Current'
     """
     current_ad_test = pandas.read_gbq(query, credentials=credentials)
 
     # If current Ad-Set exists, update it to 'Past'
     if not current_ad_test.empty:
         update_query = """
-        UPDATE `axia-414123.axia_streamlit.creativetestingstorage`
+        UPDATE `brillia-415723.streamlit_data.CreativeTestingStorage`
         SET Type = 'Past'
         WHERE Test_Name = @current_ad_test 
         """
@@ -96,7 +96,7 @@ def update_ad_set_table(test_name, ad_names):
 
     # Insert the new Ad-Set with Type 'Current'
     insert_query = """
-    INSERT INTO `freedom-solar-406415.freedom_solar_streamlit.creativetestingstorage` (Test_Name, Ad_Names, Type) VALUES (@new_ad_test, @ad_names, 'Current')
+    INSERT INTO `brillia-415723.streamlit_data.CreativeTestingStorage` (Test_Name, Ad_Names, Type) VALUES (@new_ad_test, @ad_names, 'Current')
     """
     job_config = bigquery.QueryJobConfig(
         query_parameters=[
