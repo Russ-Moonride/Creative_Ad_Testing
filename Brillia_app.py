@@ -156,16 +156,12 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     # Filter data on just ad_set
     ad_set_data = data[data['Ad_Name'].isin(ad_names)]
     ad_set_data = ad_set_data[ad_set_data['Campaign'] == campaign]
-
-    st.write(ad_set_data)
           
     # Your data processing steps
     selected_columns = ['Ad_Name', 'Impressions', 'Clicks', 'Cost', 'Purchases']
     filtered_data = ad_set_data[selected_columns]
     grouped_data = filtered_data.groupby(['Ad_Name']).sum()
     aggregated_data = grouped_data.reset_index()
-
-    st.write(aggregated_data)
           
     total = aggregated_data.sum(numeric_only=True)
     total['CPC'] = total['Cost']/total['Clicks']
@@ -482,8 +478,6 @@ def main_dashboard():
             
             for test in past_tests:
                 campaign = past_test_data[past_test_data['Test_Name'] == test].Campaign.iloc[0]
-                st.write(test)
-                st.write(campaign)
                 test_dfs[test] = process_ad_set_data(st.session_state.full_data, test, past_test_data, campaign)
           
             for test in test_dfs:
