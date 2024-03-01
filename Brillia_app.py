@@ -150,7 +150,6 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     })
 
           
-
     ad_names = past_test_data['Ad_Names'].iloc[0]
     ad_names = ad_names.split(",")
 
@@ -327,24 +326,21 @@ def main_dashboard():
     number_of_ads = st.number_input("How many ad names do you want to enter?", min_value=1, format='%d')
     new_ad_names = []
     uploaded_images = {}
-    all_filled = True 
+    all_filled = False 
 
     for i in range(int(number_of_ads)):
         ad_name = st.text_input(f"Ad Name {i+1}", key=f"ad_name_{i}")
               
         if ad_name:  # If there's an ad name entered
             ad_exists = data['Ad_Name'].str.contains(ad_name, regex=False).any()
-            new_ad_names.append(ad_name)  # Store ad name
-            #if ad_exists:
-            #    uploaded_file = st.file_uploader(f"Upload image for {ad_name}", key=f"uploaded_image_{i}", type=['png', 'jpg', 'jpeg'])
-            #    uploaded_images[ad_name] = uploaded_file  # Associate uploaded file with ad name
-            #    if uploaded_file is None:
-            #        all_filled = False  # Mark as not ready if any image is missing
+            new_ad_names.append(ad_name)  # Store ad name      
+            if ad_exists:
+                all_filled = True        
         else:
             all_filled = False  # Mark as not ready if any ad name is missing
 
      # Enable the upload button only if all conditions are met
-    if all_filled and st.button("Upload Images"): 
+    if all_filled: 
         # Update the database with the new test name and associated ad names
         combined_ad_names = ",".join(new_ad_names)
         update_ad_set_table(test_name, combined_ad_names)
