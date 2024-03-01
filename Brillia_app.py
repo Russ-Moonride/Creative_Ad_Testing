@@ -481,7 +481,7 @@ def main_dashboard():
             test_dfs = {}
             
             for test in past_tests:
-                campaign = past_test_data[past_test_data['Test_Name'= test]].Campaign
+                campaign = past_test_data[past_test_data['Test_Name' == test]].Campaign
                 test_dfs[test] = process_ad_set_data(st.session_state.full_data, test, past_test_data, campaign)
           
             for test in test_dfs:
