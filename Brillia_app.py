@@ -150,10 +150,8 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     })
 
     past_test_data = past_test_data[past_test_data['Test_Name'] == test]
-    ad_names = past_test_data.iloc[0]["Ad_Names"] 
-    st.write(ad_names)      
+    ad_names = past_test_data.iloc[0]["Ad_Names"]     
     ad_names = ad_names.replace(" ", "")
-    st.write(ad_names)
     ad_names = ad_names.split(",")
           
     # Filter data on just ad_set
@@ -200,7 +198,7 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     top_ad_impressions = final_df.iloc[0]['Impressions'] 
 
     if test == "Kids_Purchase_CRM-Children-Purchasers_0-10pct_LAL_21-65_MF_Batch-2-Untested-Statics-071223":
-              st.write(final_data)
+              st.write(final_df)
           
     # Iterate through each row except the first and last
     for index, row in final_df.iloc[1:-1].iterrows():
