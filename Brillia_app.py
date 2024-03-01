@@ -152,7 +152,7 @@ def process_ad_set_data(data, test, past_test_data, campaign):
 
     past_test_data = past_test_data[past_test_data['Test_Name'] == test]
     ad_names = past_test_data.iloc[0]["Ad_Names"]     
-    ad_names = re.sub(r'\s+', '', ad_names))
+    ad_names = re.sub(r'\s+', '', ad_names)
     ad_names = ad_names.split(",")
           
     # Filter data on just ad_set
