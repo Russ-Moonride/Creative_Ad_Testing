@@ -149,8 +149,8 @@ def process_ad_set_data(data, test, past_test_data, campaign):
       'Ad_Preview_Shareable_Link__Facebook_Ads' : 'Ad_Link'
     })
 
-    st.write(past_test_data)
-    ad_names = past_test_data['Ad_Names'].iloc[0]
+    past_test_data = past_test_data[past_test_data['Test_Name'] == test]
+    ad_names = past_test_data['Ad_Names']
     ad_names = ad_names.split(",")
 
     st.write(ad_names)
