@@ -152,6 +152,9 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     past_test_data = past_test_data[past_test_data['Test_Name'] == test]
     ad_names = past_test_data.iloc[0]["Ad_Names"]
     ad_names = ad_names.split(",")
+
+    if test == "Kids_Purchase_CRM-Children-Purchasers_0-10pct_LAL_21-65_MF_Batch-4-Back2School-2023-Test-081623":
+              st.write(ad_names)
           
     # Filter data on just ad_set
     ad_set_data = data[data['Ad_Name'].isin(ad_names)]
