@@ -154,8 +154,7 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     ad_names = ad_names.replace(" ", "")
     ad_names = ad_names.split(",")
 
-    if test == "Kids_Purchase_CRM-Children-Purchasers_0-10pct_LAL_21-65_MF_Batch-4-Back2School-2023-Test-081623":
-              st.write(ad_names)
+    st.write(ad_names)
           
     # Filter data on just ad_set
     ad_set_data = data[data['Ad_Name'].isin(ad_names)]
@@ -199,9 +198,6 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     # Top row data for comparison
     top_ad_Purchases = final_df.iloc[0]['Purchases']
     top_ad_impressions = final_df.iloc[0]['Impressions'] 
-
-    if test == "Kids_Purchase_CRM-Children-Purchasers_0-10pct_LAL_21-65_MF_Batch-4-Back2School-2023-Test-081623":
-              st.write(aggregated_data)
           
     # Iterate through each row except the first and last
     for index, row in final_df.iloc[1:-1].iterrows():
