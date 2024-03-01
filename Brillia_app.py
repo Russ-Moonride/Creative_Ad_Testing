@@ -198,6 +198,9 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     # Top row data for comparison
     top_ad_Purchases = final_df.iloc[0]['Purchases']
     top_ad_impressions = final_df.iloc[0]['Impressions'] 
+
+    if test == "Kids_Purchase_CRM-Children-Purchasers_0-10pct_LAL_21-65_MF_Batch-2-Untested-Statics-071223":
+              st.write(final_data)
           
     # Iterate through each row except the first and last
     for index, row in final_df.iloc[1:-1].iterrows():
@@ -469,7 +472,6 @@ def main_dashboard():
             final_adnames = [item + ".jpg" for item in final_adnames]
             final_adnames.pop()
      
-          
   st.markdown("<h2 style='text-align: center;'>Past Tests</h2>", unsafe_allow_html=True)
 
   if past_test_data.empty:
