@@ -158,7 +158,6 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     # Filter data on just ad_set
     ad_set_data = data[data['Ad_Name'].isin(ad_names)]
     ad_set_data = data[data['Campaign'] == campaign]
-
           
     # Your data processing steps
     selected_columns = ['Ad_Name', 'Impressions', 'Clicks', 'Cost', 'Purchases']
@@ -166,6 +165,8 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     grouped_data = filtered_data.groupby(['Ad_Name']).sum()
     aggregated_data = grouped_data.reset_index()
 
+    st.write(aggregated_data)
+          
     total = aggregated_data.sum(numeric_only=True)
     total['CPC'] = total['Cost']/total['Clicks']
     total['CPM'] = (total['Cost']/total['Impressions'])*1000
