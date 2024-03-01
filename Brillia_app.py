@@ -144,7 +144,7 @@ def process_ad_set_data(data, test, past_test_data, campaign):
       'Impressions__Facebook_Ads' : 'Impressions',
       'Link_Clicks__Facebook_Ads' : 'Clicks',
       'Amount_Spent__Facebook_Ads' : 'Cost',
-      'Leads__Facebook_Ads' : 'Leads',
+      'Purchases__Facebook_Ads' : 'Purchases',
       'Ad_Effective_Status__Facebook_Ads' : 'Ad_Status',
       'Ad_Preview_Shareable_Link__Facebook_Ads' : 'Ad_Link'
     })
@@ -159,7 +159,7 @@ def process_ad_set_data(data, test, past_test_data, campaign):
 
           
     # Your data processing steps
-    selected_columns = ['Ad_Name', 'Impressions', 'Clicks', 'Cost', 'Leads']
+    selected_columns = ['Ad_Name', 'Impressions', 'Clicks', 'Cost', 'Purchases']
     filtered_data = ad_set_data[selected_columns]
     grouped_data = filtered_data.groupby(['Ad_Name']).sum()
     aggregated_data = grouped_data.reset_index()
@@ -168,8 +168,8 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     total['CPC'] = total['Cost']/total['Clicks']
     total['CPM'] = (total['Cost']/total['Impressions'])*1000
     total['CTR'] = total['Clicks']/total['Impressions']
-    total['CVR'] = total['Leads']/total['Clicks']
-    total['CPL'] = total['Cost']/total['Leads']
+    total['CVR'] = total['Purchases']/total['Clicks']
+    total['CPL'] = total['Cost']/total['Purchases']
     total['Ad_Name'] = ""
     total['Ad_Set'] = 'Total'
   
@@ -177,15 +177,15 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     aggregated_data['CPC'] = aggregated_data['Cost']/aggregated_data['Clicks']
     aggregated_data['CPM'] = (aggregated_data['Cost']/aggregated_data['Impressions'])*1000
     aggregated_data['CTR'] = aggregated_data['Clicks']/aggregated_data['Impressions']
-    aggregated_data['CVR'] = aggregated_data['Leads']/aggregated_data['Clicks']
-    aggregated_data['CPL'] = aggregated_data['Cost']/aggregated_data['Leads']
+    aggregated_data['CVR'] = aggregated_data['Purchases']/aggregated_data['Clicks']
+    aggregated_data['CPL'] = aggregated_data['Cost']/aggregated_data['Purchases']
 
-    #Sort leads so highest performer is at the top
-    aggregated_data.sort_values(by='Leads', ascending=False, inplace=True)
+    #Sort Purchases so highest performer is at the top
+    aggregated_data.sort_values(by='Purchases', ascending=False, inplace=True)
   
     total_df = pd.DataFrame([total])
     # Reorder columns in total_df to match aggregated_data
-    total_df = total_df[[ 'Ad_Name', 'Impressions', 'Clicks', 'Cost', 'Leads', 'CPL', 'CPC', 'CPM', 'CTR', 'CVR']]
+    total_df = total_df[[ 'Ad_Name', 'Impressions', 'Clicks', 'Cost', 'Purchases', 'CPL', 'CPC', 'CPM', 'CTR', 'CVR']]
 
     # Concatenate aggregated_data with total_df
     final_df = pd.concat([aggregated_data, total_df])
@@ -194,18 +194,18 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     significance_results = []
   
     # Top row data for comparison
-    top_ad_leads = final_df.iloc[0]['Leads']
+    top_ad_Purchases = final_df.iloc[0]['Purchases']
     top_ad_impressions = final_df.iloc[0]['Impressions']
   
     # Iterate through each row except the first and last
     for index, row in final_df.iloc[1:-1].iterrows():
-        variant_leads = row['Leads']
+        variant_Purchases = row['Purchases']
         variant_impressions = row['Impressions']
   
         # Chi-square test
         chi2, p_value, _, _ = chi2_contingency([
-            [top_ad_leads, top_ad_impressions - top_ad_leads],
-            [variant_leads, variant_impressions - variant_leads]
+            [top_ad_Purchases, top_ad_impressions - top_ad_Purchases],
+            [variant_Purchases, variant_impressions - variant_Purchases]
         ])
   
         # Check if the result is significant and store the result
@@ -218,7 +218,7 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     # Add the significance results to the DataFrame
     final_df['Significance'] = significance_results
 
-    column_order = ['Ad_Name', 'Cost', 'CPM', 'Clicks', 'CPC', 'CTR', 'Leads', 'CPL', 'CVR', 'Significance']
+    column_order = ['Ad_Name', 'Cost', 'CPM', 'Clicks', 'CPC', 'CTR', 'Purchases', 'CPL', 'CVR', 'Significance']
     final_df = final_df[column_order]
   
     final_df.reset_index(drop=True, inplace=True)
@@ -314,7 +314,7 @@ def main_dashboard():
       'Impressions__Facebook_Ads' : 'Impressions',
       'Link_Clicks__Facebook_Ads' : 'Clicks',
       'Amount_Spent__Facebook_Ads' : 'Cost',
-      'Leads__Facebook_Ads' : 'Leads',
+      'Purchases__Facebook_Ads' : 'Purchases',
       'Ad_Effective_Status__Facebook_Ads' : 'Ad_Status',
       'Ad_Preview_Shareable_Link__Facebook_Ads' : 'Ad_Link'
   })
@@ -366,7 +366,7 @@ def main_dashboard():
             
             data = ad_set_data
                     
-            selected_columns = ['Ad_Name', 'Impressions', 'Clicks','Cost', 'Leads']
+            selected_columns = ['Ad_Name', 'Impressions', 'Clicks','Cost', 'Purchases']
             
             filtered_data = data[selected_columns]
           
@@ -383,8 +383,8 @@ def main_dashboard():
             total['CPC'] = total['Cost']/total['Clicks']
             total['CPM'] = (total['Cost']/total['Impressions'])*1000
             total['CTR'] = total['Clicks']/total['Impressions']
-            total['CVR'] = total['Leads']/total['Clicks']
-            total['CPL'] = total['Cost']/total['Leads']
+            total['CVR'] = total['Purchases']/total['Clicks']
+            total['CPL'] = total['Cost']/total['Purchases']
             total['Ad_Name'] = ""
             total['Ad_Set'] = 'Total'
             
@@ -392,15 +392,15 @@ def main_dashboard():
             aggregated_data['CPC'] = aggregated_data['Cost']/aggregated_data['Clicks']
             aggregated_data['CPM'] = (aggregated_data['Cost']/aggregated_data['Impressions'])*1000
             aggregated_data['CTR'] = aggregated_data['Clicks']/aggregated_data['Impressions']
-            aggregated_data['CVR'] = aggregated_data['Leads']/aggregated_data['Clicks']
-            aggregated_data['CPL'] = aggregated_data['Cost']/aggregated_data['Leads']
+            aggregated_data['CVR'] = aggregated_data['Purchases']/aggregated_data['Clicks']
+            aggregated_data['CPL'] = aggregated_data['Cost']/aggregated_data['Purchases']
           
-            #Sort leads so highest performer is at the top
-            aggregated_data.sort_values(by='Leads', ascending=False, inplace=True)
+            #Sort Purchases so highest performer is at the top
+            aggregated_data.sort_values(by='Purchases', ascending=False, inplace=True)
             
             total_df = pd.DataFrame([total])
             # Reorder columns in total_df to match aggregated_data
-            total_df = total_df[['Ad_Set', 'Ad_Name', 'Impressions', 'Clicks', 'Cost', 'Leads', 'CPL', 'CPC', 'CPM', 'CTR', 'CVR']]
+            total_df = total_df[['Ad_Set', 'Ad_Name', 'Impressions', 'Clicks', 'Cost', 'Purchases', 'CPL', 'CPC', 'CPM', 'CTR', 'CVR']]
           
             # Concatenate aggregated_data with total_df
             final_df = pd.concat([aggregated_data, total_df])
@@ -409,18 +409,18 @@ def main_dashboard():
             significance_results = []
             
             # Top row data for comparison
-            top_ad_leads = final_df.iloc[0]['Leads']
+            top_ad_Purchases = final_df.iloc[0]['Purchases']
             top_ad_impressions = final_df.iloc[0]['Impressions']
             
             # Iterate through each row except the first and last
             for index, row in final_df.iloc[1:-1].iterrows():
-                variant_leads = row['Leads']
+                variant_Purchases = row['Purchases']
                 variant_impressions = row['Impressions']
             
                 # Chi-square test
                 chi2, p_value, _, _ = chi2_contingency([
-                    [top_ad_leads, top_ad_impressions - top_ad_leads],
-                    [variant_leads, variant_impressions - variant_leads]
+                    [top_ad_Purchases, top_ad_impressions - top_ad_Purchases],
+                    [variant_Purchases, variant_impressions - variant_Purchases]
                 ])
             
                 # Check if the result is significant and store the result
@@ -433,7 +433,7 @@ def main_dashboard():
             # Add the significance results to the DataFrame
             final_df['Significance'] = significance_results
           
-            column_order = ['Ad_Name', 'Cost', 'CPM', 'Clicks', 'CPC', 'CTR', 'Leads', 'CPL', 'CVR', 'Significance']
+            column_order = ['Ad_Name', 'Cost', 'CPM', 'Clicks', 'CPC', 'CTR', 'Purchases', 'CPL', 'CVR', 'Significance']
             final_df = final_df[column_order]
           
             final_df.reset_index(drop=True, inplace=True)
