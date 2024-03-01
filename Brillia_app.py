@@ -153,6 +153,8 @@ def process_ad_set_data(data, test, past_test_data, campaign):
     ad_names = past_test_data['Ad_Names'].iloc[0]
     ad_names = ad_names.split(",")
 
+    st.write(ad_names)
+          
     # Filter data on just ad_set
     ad_set_data = data[data['Ad_Name'].isin(ad_names)]
     ad_set_data = data[data['Campaign'] == campaign]
