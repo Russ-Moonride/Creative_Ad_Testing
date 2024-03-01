@@ -155,7 +155,7 @@ def process_ad_set_data(data, test, past_test_data, campaign):
           
     # Filter data on just ad_set
     ad_set_data = data[data['Ad_Name'].isin(ad_names)]
-    ad_set_data = data[data['Campaign'] == campaign]
+    ad_set_data = ad_set_data[ad_set_data['Campaign'] == campaign]
 
     st.write(ad_set_data)
           
